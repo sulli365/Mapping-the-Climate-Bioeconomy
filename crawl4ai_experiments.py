@@ -18,17 +18,17 @@ async def extract_company_names():
         # Crawl the page
         result = await crawler.arun(
             url=url,
-            css_selector=css_selector,    # Extract specific content using the selector
+            # css_selector=css_selector,    # Extract specific content using the selector
             magic=True,                   # Enable anti-detection features
             bypass_cache=True     ,
-            js_code=[
-                # Scroll to bottom
-                "window.scrollTo(0, document.body.scrollHeight);",
-                # Click load more if exists
-                "const loadMore = document.querySelector('.load-more'); if(loadMore) loadMore.click();"
-            ],
-        # Wait for new content
-        wait_for="js:() => document.querySelectorAll('.item').length > previousCount"        # Always bypass cache to fetch fresh data
+        #     js_code=[
+        #         # Scroll to bottom
+        #         "window.scrollTo(0, document.body.scrollHeight);",
+        #         # Click load more if exists
+        #         "const loadMore = document.querySelector('.load-more'); if(loadMore) loadMore.click();"
+        #     ],
+        # # Wait for new content
+        # wait_for="js:() => document.querySelectorAll('.item').length > previousCount"        # Always bypass cache to fetch fresh data
         )
         
         # Print the extracted content
