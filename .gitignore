@@ -1,0 +1,11 @@
+# API keys
+*.env
+
+# raw data
+*.csv
+*.xls
+*.xlsx
+
+# Directories
+.venv/
+.vscode/
