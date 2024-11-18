@@ -1,86 +1,144 @@
 
-import re
+# import asyncio
+# from crawl4ai import AsyncWebCrawler
+
+# async def main():
+#     async with AsyncWebCrawler(verbose=True) as crawler:
+#         js_code = ["const loadMoreButton = Array.from(document.querySelectorAll('button')).find(button => button.textContent.includes('Load More')); loadMoreButton && loadMoreButton.click();"]
+#         result = await crawler.arun(
+#             url="https://www.nbcnews.com/business",
+#             js_code=js_code,
+#             css_selector=".wide-tease-item__description",
+#             bypass_cache=True
+#         )
+#         print(result.extracted_content)
+
+# if __name__ == "__main__":
+#     asyncio.run(main())
+
+
+
+######################################################
+# # didnt work
 import asyncio
 from crawl4ai import AsyncWebCrawler
 
+async def crawl_dynamic_content():
+    # You can use wait_for to wait for a condition to be met before returning the result
+    wait_for = """() => {
+    #     return Array.from(document.querySelectorAll('article.tease-card')).length > 10;
+    # }"""
 
-async def crawl_with_load_more():
+    # wait_for can be also just a css selector
+    # wait_for = "article.tease-card:nth-child(10)"
+
     url = "https://www.breakthroughenergy.org/lookbook/"
-    
-    async with AsyncWebCrawler(headless=True, verbose=True) as crawler:
-        load_more_selector = ".load-more"  # Confirm this matches the correct CSS selector for the "Load More" button
-        company_card_selector = ".company-card"  # Selector for loaded content (update as needed)
 
-        print("Scrolling and attempting to load more content...")
-
-        # Scroll to the bottom and click the "Load More" button
+    async with AsyncWebCrawler(verbose=True) as crawler:
+        js_code = [
+            "const loadMoreButton = Array.from(document.querySelectorAll('button')).find(button => button.textContent.includes('Load More')); loadMoreButton && loadMoreButton.click();"
+        ]
         result = await crawler.arun(
             url=url,
-            js_code=[
-                # Scroll to bottom
-                "window.scrollTo(0, document.body.scrollHeight);",
-                    # Click load more if exists
-                "const loadMore = document.querySelector('.load-more'); if(loadMore) loadMore.click();"
-            ],
-            # Wait for new content
-            wait_for="js:() => document.querySelectorAll('.item').length > previousCount"
+            js_code=js_code,
+            wait_for=wait_for,
+            bypass_cache=True,
         )
-        #     bypass_cache=True,
-        #     magic=True
-        # )
+        print(result.markdown)  # Print first 500 characters
 
-        if not result.success:
-            print(f"Error: {result.error_message}")
+asyncio.run(crawl_dynamic_content())
+
+######################################################
+
+# import re
+# import asyncio
+# from crawl4ai import AsyncWebCrawler
+
+# async def crawl_with_load_more():
+#     url = "https://www.breakthroughenergy.org/lookbook/"
+    
+#     async with AsyncWebCrawler(headless=True, verbose=True) as crawler:
+#         load_more_selector = ".load-more"  # Confirm this matches the correct CSS selector for the "Load More" button
+#         company_card_selector = ".company-card"  # Selector for loaded content (update as needed)
+#         has_more = True
+
+#         while has_more:
+#             print("Scrolling and attempting to load more content...")
+
+#             # Scroll to the bottom and click the "Load More" button
+#             result = await crawler.arun(
+#                 url=url,
+#                 js_code=[
+#                     "window.scrollTo(0, document.body.scrollHeight);",  # Scroll to the bottom
+#                     f"""
+#                     const loadMoreButton = document.querySelector('{load_more_selector}');
+#                     if (loadMoreButton) {{
+#                         console.log('Load More button clicked.');
+#                         console.log('Load More button attributes:', loadMoreButton.outerHTML);
+#                         loadMoreButton.click();
+#                     }} else {{
+#                         console.log('No more Load More button found.');
+#                     }}
+#                     """
+#                 ],
+#                 delay_before_return_html=4.0,  # Wait for new content to load
+#                 bypass_cache=True,
+#                 magic=True
+#             )
+
+#             if not result.success:
+#                 print(f"Error: {result.error_message}")
+#                 break
+
+#             # Pause briefly to ensure new content loads
+#             await asyncio.sleep(4)
+
+#             # Check if the "Load More" button still exists
+#             button_check_result = await crawler.arun(
+#                 url=url,
+#                 js_code=f"""
+#                 const button = document.querySelector('{load_more_selector}');
+#                 console.log('Load More button presence:', !!button);
+#                 return !!button;
+#                 """,
+#                 magic=True
+#             )
+
+#             # Log the state of the DOM for debugging
+#             print(f"Load More button exists: {button_check_result.extracted_content.strip()}")
+
+#             # Update the `has_more` flag
+#             has_more = button_check_result.extracted_content.strip().lower() == "true"
+
+#         print("Finished loading all content. Now scraping the page...")
+
+#         # Finally scrape the full content
+#         final_result = await crawler.arun(
+#             url=url,
+#             bypass_cache=True,
+#             magic=True
+#         )
+
+#         if final_result.success:
+#             markdown_content = final_result.markdown
+
+#             # Regex to extract only company names
+#             company_pattern = r"!\[.*?\]\(.*?\)\s(.*?)\s\|"
+
+#             matches = re.findall(company_pattern, markdown_content)
+
+#             # Clean up duplicates and unwanted entries
+#             company_names = [match.strip() for match in matches]
+
+#             print(f"Extracted Company Names: {company_names}")
+#         else:
+#             print(f"Failed to fetch content: {final_result.error_message}")
+
+# # Run the asynchronous function
+# asyncio.run(crawl_with_load_more())
 
 
-        # Pause briefly to ensure new content loads
-        await asyncio.sleep(6)
-
-            # # Check if the "Load More" button still exists
-            # button_check_result = await crawler.arun(
-            #     url=url,
-            #     js_code=f"""
-            #     const button = document.querySelector('{load_more_selector}');
-            #     console.log('Load More button presence:', !!button);
-            #     return !!button;
-            #     """,
-            #     magic=True
-            # )
-
-            # Log the state of the DOM for debugging
-            # print(f"Load More button exists: {button_check_result.extracted_content.strip()}")
-
-            # # Update the `has_more` flag
-            # has_more = button_check_result.extracted_content.strip().lower() == "true"
-
-        print("Finished loading all content. Now scraping the page...")
-
-        # Finally scrape the full content
-        final_result = await crawler.arun(
-            url=url,
-            bypass_cache=False,
-            magic=True
-        )
-
-        if final_result.success:
-            markdown_content = final_result.markdown
-
-            # Refined regex to match only company names
-            company_pattern = r"!\[.*?\]\(.*?\)\s(.*?)\s\|"
-
-            matches = re.findall(company_pattern, markdown_content)
-
-            # Clean up duplicates and unwanted entries
-            company_names = [match.strip() for match in matches]
-
-            print(f"Extracted Company Names: {company_names}")
-        else:
-            print(f"Failed to fetch content: {final_result.error_message}")
-
-# Run the asynchronous function
-asyncio.run(crawl_with_load_more())
-
-
+#################################################
 
 # import re
 # import asyncio
