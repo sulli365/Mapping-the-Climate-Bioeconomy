@@ -1,6 +1,32 @@
 
 # Bringing together code chunks from Crawl4ai to piece together
 
+# Recommends always using Resource Management
+
+try:
+    # Your crawling code
+    pass
+finally:
+    # Always clean up sessions
+    await crawler.crawler_strategy.kill_session(session_id)
+
+
+
+
+#########################
+async def crawl_article_feed():
+    async with AsyncWebCrawler() as crawler:
+        session_id = "feed_session"
+
+        for page in range(3):
+            result = await crawler.arun(
+                url="https://example.com/articles",
+                session_id=session_id,
+                js_code="document.querySelector('.load-more-button').click();" if page > 0 else None,
+                wait_for="css:.article",
+                css_selector=".article"  # Target article elements
+            )
+            print(f"Page {page + 1}: Extracted {len(result.extracted_content)} articles")
 
 #############################################################
 
