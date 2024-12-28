@@ -1,0 +1,23 @@
+## Introduction
+A well-organized file structure is crucial for any project, particularly one as ambitious as "Mapping the Climate Bioeconomy." This structure aids in efficient development and collaboration among team members. By maintaining a clear organization of files, developers can quickly locate and update components, ensuring smooth operation across the project's lifecycle. For our project focusing on the aggregation and visualization of data about biotech companies tackling climate challenges, having an orderly file system will support seamless data integration and user interface development.
+
+## Overview of the Tech Stack
+The tech stack for "Mapping the Climate Bioeconomy" is built upon advanced and modern web technologies. We have selected Next.js 14 and TypeScript for front-end development, providing a robust framework with support for JavaScript, increased code reliability, and scalability. Tailwind CSS is employed for styling, offering a utility-first approach that simplifies and accelerates the process. UI components are managed with libraries like shadcn/UI and Radix UI, enhancing the user interface aesthetics and usability. The backend is powered by Supabase, allowing us to manage user-generated content with ease and efficiency. AI integrations are included through GPT-4o and Claude 3.5 Sonnet, facilitating intelligent report generation. This diverse yet cohesive tech stack outlines the file structure, ensuring modularity and efficient data handling.
+
+## Root Directory Structure
+The root directory is organized to provide an accessible overview of the project's components. At this level, you will find essential configuration files and main directories. Key configuration files such as `package.json` for Node.js dependencies and `tsconfig.json` for TypeScript configuration reside here. The primary directories include `src` for all source code, `public` for static assets like images or fonts, and `docs` for any project documentation that assists in development and onboarding.
+
+## Frontend File Structure
+Within the `src` directory, the frontend is organized into several subdirectories to promote modularity and ease of maintenance. The `components` directory houses reusable UI components, ensuring consistent design patterns and saving development time. The `pages` directory follows Next.js conventions, mapping each file to a route in the web application. CSS files are managed within a `styles` directory, applying Tailwind CSS for coherent styling across the application. Furthermore, the `assets` directory includes images, SVGs, and other static resources necessary for visual embellishments.
+
+## Backend File Structure
+Also nested within the `src` directory, the backend embraces a structure that enhances functionality and scalability. The `api` directory contains route handlers essential for data fetching and server-client communication. `models` houses schema definitions that interact with Supabase, guiding database operations and ensuring data integrity. The `services` directory includes business logic, separating complex operations from direct route handling, thus promoting clean and maintainable code.
+
+## Configuration and Environment Files
+Configuration files play a vital role in setting up the development environment and ensuring smooth deployment. Among these, `.env` files are used to manage environment-specific variables like API keys and database connections. The `next.config.js` file defines custom server configurations tailored for our application's needs. Dependency management is streamlined via `package.json`, ensuring all team members have the same project setup.
+
+## Testing and Documentation Structure
+Testing and documentation are organized to support quality assurance and facilitate information sharing. The `tests` directory contains automated test files, using frameworks like Jest, ensuring all features work as expected before deployment. Within `docs`, developers and users can find comprehensive guides and API documentation, fostering understanding and easing onboarding for new team members.
+
+## Conclusion and Overall Summary
+The file structure outlined for "Mapping the Climate Bioeconomy" provides a foundational framework that supports the project's development, maintenance, and expansion. By accommodating the unique aspects of our tech stack and project requirements, this organization promotes effective collaboration and facilitates the application's goals to educate and engage its audience. With clearly defined boundaries and organized systems, the project is poised to tackle additional complexity or scale when necessary, ensuring a stable foundation for future enhancements.
